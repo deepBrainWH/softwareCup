@@ -5,10 +5,7 @@ from tensorflow.python.keras.losses import categorical_crossentropy
 from tensorflow.python.keras.callbacks import TensorBoard, ModelCheckpoint
 from tensorflow.python.keras.models import load_model
 from tensorflow.python.keras.utils import multi_gpu_model
-import dataset
-import os
-import numpy as np
-import cv2
+import c1_dataset
 
 IMAGE_ROWS = 41
 IMAGE_COLS = 28
@@ -18,10 +15,8 @@ NUM_CLASS = 11
 
 def model(multi_gpu=False, gpus=4):
     # load all data
-    mybatch = dataset.batch()
+    mybatch = c1_dataset.batch()
     x_train, y_train, x_test, y_test = mybatch.load_data()
-    x_train = x_train / 255.0
-    x_test = x_test / 255.0
     print("x_train_shape:", x_train.shape, '\n', 'y_train_shape:', y_train.shape)
     print('x_test_shape:', x_test.shape, '\n', 'y_test_shape:', y_test.shape)
 
@@ -46,21 +41,21 @@ def load_keras_model(model_path):
     return load_model(model_path)
 
 if __name__ == '__main__':
-    # model()
-    mymodel = load_keras_model("./h5/weights-improvement-116-0.98.h5")
-    while True:
-        filename = input("please input one file name:")
-        filepath = "C:\\Users\\wangheng\\Documents\\software_cup\\number\\" + filename
-        print(filepath)
-        if os.path.isfile(filepath):
-            imread = cv2.imread(filepath)
-            reshape = np.reshape(imread, (1, imread.shape[0], imread.shape[1], imread.shape[2]))
-            data_ = np.asarray(reshape,np.float32) / 255.0
-            result = mymodel.predict(data_)
-            res = np.argmax(result)
-            if res == 10:
-                print("not a number!")
-            else:
-                print(res)
-        else:
-            print("file path error!")
+    model()
+    # mymodel = load_keras_model("./h5/weights-improvement-116-0.98.h5")
+    # while True:
+    #     filename = input("please input one file name:")
+    #     filepath = "C:\\Users\\wangheng\\Documents\\software_cup\\number\\" + filename
+    #     print(filepath)
+    #     if os.path.isfile(filepath):
+    #         imread = cv2.imread(filepath)
+    #         reshape = np.reshape(imread, (1, imread.shape[0], imread.shape[1], imread.shape[2]))
+    #         data_ = np.asarray(reshape,np.float32) / 255.0
+    #         result = mymodel.predict(data_)
+    #         res = np.argmax(result)
+    #         if res == 10:
+    #             print("not a number!")
+    #         else:
+    #             print(res)
+    #     else:
+    #         print("file path error!")

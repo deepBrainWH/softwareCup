@@ -3,11 +3,12 @@ from sklearn.model_selection import train_test_split
 import pandas as pd
 import math
 import cv2
+import myconfig
 
 
 class NumModel:
     def __init__(self):
-        self.df = pd.read_csv(r"C:\Users\wangheng\Documents\software_cup\dataframe1.csv", index_col=0)
+        self.df = pd.read_csv(myconfig.DATA_DIR, index_col=0)
         values = self.df.values
         self.train_x, self.test_x, self.train_y, self.test_y = train_test_split(values[:, 0], values[:, 2:],
                                                                                 test_size=0.3, random_state=0,
@@ -46,7 +47,7 @@ class batch:
             train_x.append(imread)
         train_x = np.asarray(train_x, np.float)
         train_y = np.asarray(one_batch_y, np.float)
-        return train_x / 255.0, train_y
+        return train_x, train_y
 
     def get_test_data(self):
         test_x = []
@@ -55,7 +56,7 @@ class batch:
             test_x.append(imread)
         test_x = np.asarray(test_x, np.float)
         test_y = np.asarray(self.test_y, np.float)
-        return test_x / 255.0, test_y
+        return test_x, test_y
 
     def load_data(self):
         """
@@ -68,5 +69,6 @@ class batch:
         test_x = []
         for f in self.test_x:
             test_x.append(cv2.imread(f))
-        return np.asarray(train_x, np.float32) / 255.0, np.asarray(self.train_y, np.float32), \
-               np.asarray(test_x, np.float32) / 255.0, np.asarray(self.test_y, np.float32)
+        return np.asarray(train_x, np.float32), np.asarray(self.train_y, np.float32), np.asarray(test_x,
+                                                                                             np.float32), np.asarray(
+            self.test_y, np.float32)
