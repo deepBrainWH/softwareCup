@@ -1,0 +1,14 @@
+<<<<<<< Updated upstream
+# Created by .ignore support plugin (hsz.mobi)
+.idea/
+creditcard1/myconfig.py
+creditcard1/__pycache__/
+creditcard1/h5/
+creditcard1/log/
+creditcard2/myconfig.py
+creditcard2/__pycache__/
+creditcard2/h5/
+creditcard2/log/
+
+peopleflow/
+traffic/
