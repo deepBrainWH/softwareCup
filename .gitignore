@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 # Created by .ignore support plugin (hsz.mobi)
 .idea/
 creditcard1/myconfig.py
@@ -14,3 +13,4 @@ peopleflow/
 traffic/
 trash/h5/
 trash/log/
+trash/__pycache__/
