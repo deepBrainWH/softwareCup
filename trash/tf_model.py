@@ -53,8 +53,8 @@ def build_model():
     loss = tf.reduce_sum(tf.nn.softmax_cross_entropy_with_logits_v2(logits=fc3, labels=y, name='loss'))
     tf.summary.scalar("loss", loss)
     accuracy = tf.reduce_mean(\
-        tf.cast(tf.equal(tf.argmax(predict, axis=1), tf.argmax(y, axis=1)), tf.float32))
+        tf.cast(tf.equal(predict, tf.argmax(y, axis=1)), tf.float32))
     tf.summary.scalar("acc", accuracy)
     merged = tf.summary.merge_all()
     return x, y, predict, loss, accuracy, merged
-    
+
