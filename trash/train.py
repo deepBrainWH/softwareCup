@@ -109,14 +109,14 @@ class Train(object):
     def predict_value(self, type='image', image_path=None):
         saver = tf.train.Saver()
         sess = tf.InteractiveSession()
-        saver.restore(sess, tf.train.latest_checkpoint("./h5_deep_server/"))
+        saver.restore(sess, tf.train.latest_checkpoint("./h5_dell/"))
         if type == 'image':
             image = cv2.imread(image_path)
             image = np.asarray(image, np.float32) / 255.
             image = np.reshape(image, (1, image.shape[0], image.shape[1], image.shape[2]))
             predict = sess.run(self.predict, feed_dict={self.x: image})
         elif type == 'video':
-            capture = cv2.VideoCapture(0)
+            capture = cv2.VideoCapture(1)
             while True:
                 ret, frame = capture.read()
                 resize = cv2.resize(frame, (200, 200))
@@ -144,5 +144,5 @@ if __name__ == '__main__':
     # while mytrain.has_next_batch:
     #     train_x, train_y = mytrain.next_batch()
     #     print(train_x.shape, train_y.shape)
-    mytrain.train()
-    # mytrain.predict_value("video")
+    # mytrain.train()
+    mytrain.predict_value("video")
