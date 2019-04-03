@@ -7,7 +7,3 @@
 > $loss = \frac{1}{n} \displaystyle \sum^{n}_{i=0}(\hat{y_i} - y_i)^2$  
 > $=\frac{1}{n} \displaystyle \sum_{i=0}^n(f_i(x) - y_i)^2$  
 > $=\frac{1}{n} \displaystyle \sum_{i=0}^{n}(\omega x_i +b - y_i)^2$  
-> 
-
-
-> $\sum^{x \to \infty}_{y \to 0}{\frac{x}{y}}$
