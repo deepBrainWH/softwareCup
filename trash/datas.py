@@ -91,7 +91,7 @@ class Data(object):
         model.compile(optimizer=Adadelta(), loss=categorical_crossentropy, metrics=['accuracy'])
         print(model.summary())
 
-        filepath = "./h5/weights-improvement-{epoch:02d}-{val_acc:.2f}.h5"
+        filepath = "./h5_deep_server/weights-improvement-{epoch:02d}-{val_acc:.2f}.h5_deep_server"
         callback_list = [TensorBoard('./log'),
                          ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True)]
         model.fit(train_x, train_y, 64, 10, 1, callbacks=callback_list, validation_split=0.3,shuffle=True)

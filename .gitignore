@@ -6,7 +6,7 @@ creditcard1/h5/
 creditcard1/log/
 creditcard2/myconfig.py
 creditcard2/__pycache__/
-creditcard2/h5/
+creditcard2/h5_deep_server/
 creditcard2/log/
 
 peopleflow/
@@ -15,3 +15,5 @@ trash/h5/
 trash/log/
 trash/__pycache__/
 trash/assets/
+creditcard2/h5/
+trash/h5_dell/

@@ -63,7 +63,7 @@ def model(with_log=True):
     sess = tf.Session(config=config)
     writer = tf.summary.FileWriter('./log', sess.graph)
     saver = tf.train.Saver(max_to_keep=3)
-    # saver.restore(sess, tf.train.latest_checkpoint("./h5/"))
+    # saver.restore(sess, tf.train.latest_checkpoint("./h5_deep_server/"))
     sess.run(init)
     for i in range(1000):
         mybatch = c2_dataset.batch()
@@ -84,7 +84,7 @@ def model(with_log=True):
             l_, a_ = sess.run([loss, accuracy], feed_dict={X: test_x / 255.0, y: test_y})
             print("step : %d, test data loss value is : %.4f, test data accuracy is : %.4f" % (i, l_, a_))
         if i % 40 == 0:
-            saver.save(sess, "./h5/model.ckpt", i)
+            saver.save(sess, "./h5_deep_server/model.ckpt", i)
 
     sess.close()
 

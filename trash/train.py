@@ -16,6 +16,10 @@ class Train(object):
         self.train_x_path, self.train_y, self.end, self.test_x_path, self.test_y = self.__get_train_data()
         self.has_next_batch = True
         self.batches = math.ceil(self.end / self.batch_size)
+
+        self.config = tf.ConfigProto()
+        self.config.gpu_options.allow_growth = True
+
         # 一下为模型相关参数
         self.x, self.y, self.predict, self.loss, self.accuracy, self.merged = tf_model.build_model()
         self.opt = tf.train.AdamOptimizer().minimize(self.loss)
@@ -72,8 +76,8 @@ class Train(object):
 
     def train(self):
 
-        saver = tf.train.Saver(max_to_keep=6)
-        sess = tf.InteractiveSession()
+        saver = tf.train.Saver(max_to_keep=3)
+        sess = tf.InteractiveSession(config=self.config)
         sess.run(tf.global_variables_initializer())
         writer = tf.summary.FileWriter("./log", graph=sess.graph)
         for i in range(100):
@@ -86,22 +90,26 @@ class Train(object):
                                                         feed_dict={self.x: train_x, self.y: train_y})
                 all_loss_ += loss_
                 all_acc_ += accuracy_
-                print("\repoch %d---->    " % i + "=" * j + "-" * (self.batches - j) + "\t\t loss: %.4f, acc: %.4f" % (
+                print("\repoch %d-- batch: %d-->    " % (i, j) + "=" * j + ">" + "-" * (self.batches - j) + "\t\t loss: %.4f, acc: %.4f" % (
                     loss_, accuracy_), end='')
                 j += 1
                 writer.add_summary(merged_, i * self.batches + j - 1)
-            print("===epoch %d===    >    mean loss is : %.4f, mean acc is : %.4f" % (
+            print("\n===epoch %d===    >    mean loss is : %.4f, mean acc is : %.4f" % (
                 i, all_loss_ / self.batches, all_acc_ / self.batches))
+            test_x, test_y = self.get_test_data()
+            test_loss_, test_acc_ = sess.run([self.loss, self.accuracy], feed_dict={self.x: test_x[0:16], self.y: test_y[0:16]})
+            print("===epoch %d===    >    test loss is : %.4f, test acc is : %.4f" % (
+                i, test_loss_, test_acc_))
             self.start = 0
             self.has_next_batch = True
-            if i % 10 == 0:
-                saver.save(sess, "./h5/mode.ckpt", i)
+            if i % 5 == 0:
+                saver.save(sess, "./h5_dell/mode.ckpt", i)
         sess.close()
 
     def predict_value(self, type='image', image_path=None):
         saver = tf.train.Saver()
         sess = tf.InteractiveSession()
-        saver.restore(sess, tf.train.latest_checkpoint("./h5/"))
+        saver.restore(sess, tf.train.latest_checkpoint("./h5_deep_server/"))
         if type == 'image':
             image = cv2.imread(image_path)
             image = np.asarray(image, np.float32) / 255.
@@ -132,9 +140,9 @@ class Train(object):
 
 
 if __name__ == '__main__':
-    mytrain = Train(64)
+    mytrain = Train(32)
     # while mytrain.has_next_batch:
     #     train_x, train_y = mytrain.next_batch()
     #     print(train_x.shape, train_y.shape)
-    # mytrain.train()
-    mytrain.predict_value("video")
+    mytrain.train()
+    # mytrain.predict_value("video")
