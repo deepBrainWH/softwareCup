@@ -1,2 +1,3 @@
 ##### 信用卡卡号识别--1
-采用tensorflow keras
+* In ```c1_model.py``` file, you will look at the structure of train network.  
+
