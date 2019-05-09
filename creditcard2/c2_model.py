@@ -1,5 +1,8 @@
 import tensorflow as tf
+<<<<<<< HEAD
 import c2_nn
+=======
+>>>>>>> d80a7d0f8e07fdf0e0c8a5bd8bad549119f7a956
 import c2_dataset
 
 NUM_CLASSES = 11
@@ -11,7 +14,10 @@ def model(with_log=True):
     with tf.name_scope("input"):
         X = tf.placeholder(tf.float32, [None, 41, 28, 3], "input_x")
         y = tf.placeholder(tf.float32, [None, 11], "input_y")
+<<<<<<< HEAD
     regularizer = tf.contrib.layers.l2_regularizer(scale=0.1)
+=======
+>>>>>>> d80a7d0f8e07fdf0e0c8a5bd8bad549119f7a956
     conv1 = tf.layers.conv2d(inputs=X,
                              filters=32,
                              kernel_size=[3, 3],
@@ -30,10 +36,19 @@ def model(with_log=True):
     bn2 = tf.layers.batch_normalization(conv2, name='bn2')
     max1 = tf.layers.max_pooling2d(bn2, [2, 2], [2, 2], 'same')
     dropout2 = tf.layers.dropout(max1, 0.5, name='dropout2')
+<<<<<<< HEAD
     flatten = tf.reshape(dropout2, (-1, dropout2.shape[1].value * dropout2.shape[2].value * dropout2.shape[3].value), name="flatten")
 
     fc1 = tf.layers.dense(flatten, 128, activation=tf.nn.relu)
     dropout3 = tf.layers.dropout(fc1, 0.5)
+=======
+    flatten = tf.reshape(dropout2, (-1, dropout2.shape[1].value * dropout2.shape[2].value * dropout2.shape[3].value),
+                         name="flatten")
+
+    fc1 = tf.layers.dense(flatten, 128, activation=tf.nn.relu)
+    bn3 = tf.layers.batch_normalization(fc1, name="bn3")
+    dropout3 = tf.layers.dropout(bn3, 0.5)
+>>>>>>> d80a7d0f8e07fdf0e0c8a5bd8bad549119f7a956
     fc2 = tf.layers.dense(dropout3, 64, activation=tf.nn.relu)
     dropout4 = tf.layers.dropout(fc2, 0.5)
     fc3 = tf.layers.dense(dropout4, NUM_CLASSES)
@@ -63,7 +78,11 @@ def model(with_log=True):
     sess = tf.Session(config=config)
     writer = tf.summary.FileWriter('./log', sess.graph)
     saver = tf.train.Saver(max_to_keep=3)
+<<<<<<< HEAD
     # saver.restore(sess, tf.train.latest_checkpoint("./h5/"))
+=======
+    # saver.restore(sess, tf.train.latest_checkpoint("./h5_deep_server/"))
+>>>>>>> d80a7d0f8e07fdf0e0c8a5bd8bad549119f7a956
     sess.run(init)
     for i in range(1000):
         mybatch = c2_dataset.batch()
@@ -78,13 +97,21 @@ def model(with_log=True):
             tmp_acc_ += acc_
             j += 1
             writer.add_summary(merge_all_, i * batches + j)
+<<<<<<< HEAD
         print("step %d , accuracy is : %.4f, loss is : %.4f" % (i, tmp_acc_ / batches, tmp_loss_ / batches))
+=======
+        print("step %d , loss is : %.4f, acc is : %.4f" % (i, tmp_loss_ / batches, tmp_acc_ / batches))
+>>>>>>> d80a7d0f8e07fdf0e0c8a5bd8bad549119f7a956
         if i % 10 == 0:
             test_x, test_y = mybatch.get_test_data()
             l_, a_ = sess.run([loss, accuracy], feed_dict={X: test_x / 255.0, y: test_y})
             print("step : %d, test data loss value is : %.4f, test data accuracy is : %.4f" % (i, l_, a_))
         if i % 40 == 0:
+<<<<<<< HEAD
             saver.save(sess, "./h5/model.ckpt", i)
+=======
+            saver.save(sess, "./h5_deep_server/model.ckpt", i)
+>>>>>>> d80a7d0f8e07fdf0e0c8a5bd8bad549119f7a956
 
     sess.close()
 
