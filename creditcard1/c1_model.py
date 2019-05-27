@@ -32,11 +32,8 @@ def model(multi_gpu=False, gpus=4):
         model = multi_gpu_model(model, gpus=gpus)
     model.compile(optimizer=Adadelta(), loss=categorical_crossentropy, metrics=['accuracy'])
     print(model.summary())
-<<<<<<< HEAD
-    filepath = "./h5/weights-improvement-{epoch:02d}-{val_acc:.2f}.h5"
-=======
+
     filepath = "./h5_deep_server/weights-improvement-{epoch:02d}-{val_acc:.2f}.h5_deep_server"
->>>>>>> d80a7d0f8e07fdf0e0c8a5bd8bad549119f7a956
     callback_list = [TensorBoard('./log'), ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True)]
     model.fit(x_train, y_train, 128, 1000, 1, callbacks=callback_list, validation_split=0.3)
 
@@ -46,11 +43,8 @@ def load_keras_model(model_path):
 
 if __name__ == '__main__':
     model()
-<<<<<<< HEAD
     # mymodel = load_keras_model("./h5/weights-improvement-116-0.98.h5")
-=======
-    # mymodel = load_keras_model("./h5_deep_server/weights-improvement-116-0.98.h5_deep_server")
->>>>>>> d80a7d0f8e07fdf0e0c8a5bd8bad549119f7a956
+
     # while True:
     #     filename = input("please input one file name:")
     #     filepath = "C:\\Users\\wangheng\\Documents\\software_cup\\number\\" + filename
