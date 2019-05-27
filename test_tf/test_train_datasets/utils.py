@@ -46,7 +46,9 @@ def image_enhance_gama(in_image):
     :return:
     """
     in_image = in_image / 255.
-    gamma = 0.4
+    gamma = 0.3
     out = np.power(in_image, gamma)
+    out = np.asarray(out*255, dtype=np.uint8)
+    print(np.max(out), np.min(out))
     cv2.imshow("gamma", out)
     grayHist(out)

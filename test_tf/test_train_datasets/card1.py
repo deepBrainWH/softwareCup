@@ -3,6 +3,7 @@ import numpy as np
 import os
 from test_tf.test_train_datasets.utils import *
 
+
 FILE_PATH = "/home/wangheng/Documents/software_cup/train_card_images/"
 listdir = os.listdir(FILE_PATH)
 files = []
@@ -20,9 +21,9 @@ def read_image(image_path):
     np_min = np.min(imread, axis=2)
     np_asarray2 = np.asarray(np_min, dtype=np.uint8)
 
-    gray = cv2.cvtColor(imread, cv2.COLOR_BGR2GRAY)
+    my_gray = cv2.cvtColor(imread, cv2.COLOR_BGR2GRAY)
     # image_regularization(gray)
-    image_enhance_gama(gary)
+    image_enhance_gama(np_min)
     cv2.namedWindow("image", cv2.WINDOW_FREERATIO)
     cv2.namedWindow("max", cv2.WINDOW_FREERATIO)
     cv2.namedWindow("gray", cv2.WINDOW_FREERATIO)
@@ -31,11 +32,12 @@ def read_image(image_path):
     cv2.imshow("image", imread)
     cv2.imshow("max", np_asarray1)
     cv2.imshow("min", np_asarray2)
-    cv2.imshow("gray", gray)
+    cv2.imshow("gray", my_gray)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
 def run():
-    read_image(files[2])
+    for file in files:
+        read_image(file)
 
 run()
