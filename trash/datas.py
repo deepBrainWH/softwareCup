@@ -63,3 +63,5 @@ if __name__ == '__main__':
     train_obj = Train(csv_file_saved_path + "train.csv", 32)
     train_obj.train()
 
+    # predict_value = train_obj.predict_value("image", "your image path.")
+

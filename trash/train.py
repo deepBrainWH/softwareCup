@@ -148,10 +148,6 @@ class Train(object):
     def trian_model(self):
 
         while self.has_next_batch:
-            train_x, train_y = mytrain.next_batch()
+            train_x, train_y = self.next_batch()
             print(train_x.shape, train_y.shape)
             self.train()
-if __name__ == '__main__':
-    mytrain = Train(32)
-
-    mytrain.predict_value("image")
