@@ -9,10 +9,10 @@ np.random.seed(10)
 
 
 class Train(object):
-    def __init__(self, batch_size=128):
+    def __init__(self, data_path, batch_size=128):
         self.batch_size = batch_size
         self.start = 0
-        self.data_path = "C:\\Users\\wangheng\\Documents\\software_cup\\train.csv"
+        self.data_path = data_path
         self.train_x_path, self.train_y, self.end, self.test_x_path, self.test_y = self.__get_train_data()
         self.has_next_batch = True
         self.batches = math.ceil(self.end / self.batch_size)
@@ -20,7 +20,7 @@ class Train(object):
         self.config = tf.ConfigProto()
         self.config.gpu_options.allow_growth = True
 
-        # 一下为模型相关参数
+        # Following codes are the corresponding parameters of model.
         self.x, self.y, self.predict, self.loss, self.accuracy, self.merged = tf_model.build_model()
         self.opt = tf.train.AdamOptimizer().minimize(self.loss)
 
@@ -75,7 +75,6 @@ class Train(object):
         return test_x, test_y
 
     def train(self):
-
         saver = tf.train.Saver(max_to_keep=3)
         sess = tf.InteractiveSession(config=self.config)
         sess.run(tf.global_variables_initializer())
@@ -90,14 +89,16 @@ class Train(object):
                                                         feed_dict={self.x: train_x, self.y: train_y})
                 all_loss_ += loss_
                 all_acc_ += accuracy_
-                print("\repoch %d-- batch: %d-->    " % (i, j) + "=" * j + ">" + "-" * (self.batches - j) + "\t\t loss: %.4f, acc: %.4f" % (
-                    loss_, accuracy_), end='')
+                print("\repoch %d-- batch: %d-->    " % (i, j) + "=" * j + ">" + "-" * (
+                            self.batches - j) + "\t\t loss: %.4f, acc: %.4f" % (
+                          loss_, accuracy_), end='')
                 j += 1
                 writer.add_summary(merged_, i * self.batches + j - 1)
             print("\n===epoch %d===    >    mean loss is : %.4f, mean acc is : %.4f" % (
                 i, all_loss_ / self.batches, all_acc_ / self.batches))
             test_x, test_y = self.get_test_data()
-            test_loss_, test_acc_ = sess.run([self.loss, self.accuracy], feed_dict={self.x: test_x[0:16], self.y: test_y[0:16]})
+            test_loss_, test_acc_ = sess.run([self.loss, self.accuracy],
+                                             feed_dict={self.x: test_x[0:16], self.y: test_y[0:16]})
             print("===epoch %d===    >    test loss is : %.4f, test acc is : %.4f" % (
                 i, test_loss_, test_acc_))
             self.start = 0
@@ -111,12 +112,13 @@ class Train(object):
         sess = tf.InteractiveSession()
         saver.restore(sess, tf.train.latest_checkpoint("./h5_dell/"))
         if type == 'image':
+            assert image_path is not None
             image = cv2.imread(image_path)
             image = np.asarray(image, np.float32) / 255.
             image = np.reshape(image, (1, image.shape[0], image.shape[1], image.shape[2]))
             predict = sess.run(self.predict, feed_dict={self.x: image})
         elif type == 'video':
-            capture = cv2.VideoCapture(1)
+            capture = cv2.VideoCapture(0)
             while True:
                 ret, frame = capture.read()
                 resize = cv2.resize(frame, (200, 200))
@@ -124,13 +126,18 @@ class Train(object):
                 x_ = np.reshape(x_, [1, x_.shape[0], x_.shape[1], x_.shape[2]])
                 predict = sess.run(self.predict, feed_dict={self.x: x_})
                 if predict == 0:
-                    cv2.putText(frame, "bottle", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 2, cv2.LINE_AA)
+                    cv2.putText(frame, "shui ping", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 2, cv2.LINE_AA)
                 elif predict == 1:
-                    cv2.putText(frame, "paper", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 255), 2, cv2.LINE_AA)
+                    cv2.putText(frame, "can he", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 255), 2, cv2.LINE_AA)
                 elif predict == 2:
-                    cv2.putText(frame, "fruit", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 2, cv2.LINE_AA)
+                    cv2.putText(frame, "su liao ban", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 2, cv2.LINE_AA)
                 elif predict == 3:
-                    cv2.putText(frame, "food", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 255), 2, cv2.LINE_AA)
+                    cv2.putText(frame, "zhi xiang", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 255), 2, cv2.LINE_AA)
+                elif predict == 4:
+                    cv2.putText(frame, "ping guo", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 255), 2, cv2.LINE_AA)
+                elif predict == 5:
+                    cv2.putText(frame, "xiang jiao", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 255), 2, cv2.LINE_AA)
+
                 cv2.imshow("recognized", frame)
                 key = cv2.waitKey(1)
                 if key == 27:
@@ -138,11 +145,13 @@ class Train(object):
             cv2.destroyAllWindows()
             capture.release()
 
+    def trian_model(self):
 
+        while self.has_next_batch:
+            train_x, train_y = mytrain.next_batch()
+            print(train_x.shape, train_y.shape)
+            self.train()
 if __name__ == '__main__':
     mytrain = Train(32)
-    # while mytrain.has_next_batch:
-    #     train_x, train_y = mytrain.next_batch()
-    #     print(train_x.shape, train_y.shape)
-    # mytrain.train()
-    mytrain.predict_value("video")
+
+    mytrain.predict_value("image")
