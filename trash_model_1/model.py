@@ -1,31 +1,18 @@
 import tensorflow as tf
 
 
-def concat(layer_name, inputs):
-    with tf.name_scope(layer_name):
-        return tf.concat([inputs[0], inputs[1], inputs[2]], axis=3, name="concat")
-
-
 def build_model():
     with tf.name_scope("input"):
         x = tf.placeholder(tf.float32, [None, 200, 200, 3], "x")
         y = tf.placeholder(tf.float32, [None, 5], "y")
 
     with tf.variable_scope("conv_layer_1"):
-        conv1_1 = tf.layers.conv2d(x, 64, [3, 3], activation=tf.nn.relu, padding='same', name='conv1_3_3')
-        conv1_2 = tf.layers.conv2d(x, 64, [5, 5], activation=tf.nn.relu, padding='same', name='conv1_5_5')
-        conv1_3 = tf.layers.conv2d(x, 64, [1, 1], activation=tf.nn.relu, padding='same', name='conv1_1_1')
-        conv1 = concat("conv_layer_1", [conv1_1, conv1_2, conv1_3])
-
-        max1 = tf.layers.max_pooling2d(conv1, [2, 2], [1, 1])
+        conv1 = tf.layers.conv2d(x, 64, [3, 3], activation=tf.nn.relu, name='conv1')
+        max1 = tf.layers.max_pooling2d(conv1, [2, 2], [2, 2])
         bn1 = tf.layers.batch_normalization(max1, name='bn1')
 
     with tf.variable_scope("conv_layer_2"):
-        conv2_1 = tf.layers.conv2d(bn1, 64, [3, 3], activation=tf.nn.relu, padding='same', name='conv2_3_3')
-        conv2_2 = tf.layers.conv2d(bn1, 64, [5, 5], activation=tf.nn.relu, padding='same', name='conv2_5_5')
-        conv2_3 = tf.layers.conv2d(bn1, 64, [1, 1], activation=tf.nn.relu, padding='same', name='conv2_1_1')
-        conv2 = concat("conv_layer_2", [conv2_1, conv2_2, conv2_3])
-
+        conv2 = tf.layers.conv2d(bn1, 64, [3, 3], activation=tf.nn.relu, name='conv2')
         max2 = tf.layers.max_pooling2d(conv2, [2, 2], [2, 2], name='max2')
         bn2 = tf.layers.batch_normalization(max2)
 
@@ -55,7 +42,7 @@ def build_model():
         dropout3 = tf.layers.dropout(fc3, 0.5)
 
     with tf.variable_scope("fc_layer4"):
-        fc4 = tf.layers.dense(dropout3, 16)
+        fc4 = tf.layers.dense(dropout3, 32)
 
     with tf.variable_scope("fc_layer5"):
         fc5 = tf.layers.dense(fc4, 5)

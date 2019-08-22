@@ -10,4 +10,6 @@ creditcard2/h5/
 creditcard2/log/
 test_tf/
 creditcard2/h5_deep_server/
-
+trash_model_1/log
+trash_model_1/persist_model
+trash_model_1/training_data/*
