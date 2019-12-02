@@ -1,4 +1,3 @@
-import cv2
 from keras import Sequential
 from keras.layers.convolutional import Convolution2D
 from keras.layers.convolutional import MaxPooling2D

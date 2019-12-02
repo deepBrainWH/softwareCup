@@ -4,7 +4,7 @@ import tensorflow as tf
 def build_model():
     with tf.name_scope("input"):
         x = tf.placeholder(tf.float32, [None, 200, 200, 3], "x")
-        y = tf.placeholder(tf.float32, [None, 5], "y")
+        y = tf.placeholder(tf.float32, [None, 7], "y")
 
     with tf.variable_scope("conv_layer_1"):
         conv1 = tf.layers.conv2d(x, 64, [3, 3], activation=tf.nn.relu, name='conv1')
@@ -45,7 +45,7 @@ def build_model():
         fc4 = tf.layers.dense(dropout3, 32)
 
     with tf.variable_scope("fc_layer5"):
-        fc5 = tf.layers.dense(fc4, 5)
+        fc5 = tf.layers.dense(fc4, 7)
 
     softmax = tf.nn.softmax(fc5, name='softmax')
     predict = tf.argmax(softmax, axis=1)

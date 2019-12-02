@@ -7,9 +7,9 @@ import cv2
 import os
 import shutil
 
-np.random.seed(10)
+# np.random.seed(10)
 
-csv_file_path = "./training_data/train.csv"
+csv_file_path = "./training_data_2/train.csv"
 
 
 class Train(object):
@@ -85,9 +85,9 @@ class Train(object):
         saver = tf.train.Saver(max_to_keep=15)
         sess = tf.InteractiveSession(config=self.config)
         sess.run(tf.global_variables_initializer())
-        if os.path.isdir("./log"):
-            shutil.rmtree("./log")
-        writer = tf.summary.FileWriter("./log", graph=sess.graph)
+        if os.path.isdir("./log2"):
+            shutil.rmtree("./log2")
+        writer = tf.summary.FileWriter("./log2", graph=sess.graph)
         for i in range(100):
             j = 1
             all_loss_ = 0
@@ -129,7 +129,7 @@ class Train(object):
             self.has_next_batch = True
             if all_acc_ / self.batches > self.max_train_accuracy or \
                     np.mean(np.array(all_test_acc)) > self.max_test_accuracy:
-                saver.save(sess, "./persist_model/mode.ckpt", i)
+                saver.save(sess, "./persist_model_2/mode.ckpt", i)
                 self.max_train_accuracy = all_acc_ / self.batches
                 self.max_test_accuracy = np.mean(np.array(all_test_acc))
             if self.max_test_accuracy >= 0.97 and self.max_train_accuracy>=0.98:

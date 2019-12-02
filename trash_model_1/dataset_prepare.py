@@ -6,8 +6,8 @@ import os
 import cv2
 import pandas as pd
 
-csv_file_saved_path = "./training_data/"
-image_path = "./training_data/new_datasets/"
+csv_file_saved_path = "./training_data_2/"
+image_path = "./training_data_2/new_datasets/"
 
 
 class Data(object):
@@ -65,6 +65,6 @@ class Data(object):
 
 if __name__ == '__main__':
     obj = Data()
-    # obj.rename()
-    # obj.resize_img()
+    obj.rename()
+    obj.resize_img()
     obj.train_data_to_csv()
